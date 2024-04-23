@@ -3,17 +3,24 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable{
+    final int FPS = 60; 
+
+    // Heigh and width of the board
     public static final int WIDTH = 1200; 
     public static final int HEIGHT = 700; 
-    final int FPS = 60; 
-    Thread gameThread; 
-    Board board = new Board(); 
 
-    // This is the constructor of this class 
+    //Color of the Pieces
+    public static final int RED = 0; 
+    public static final int BLUE = 1; 
+    int currentColor = RED; 
+
+    Thread gameThread; 
+    Board board = new Board(); // <-- instantiates the board 
+
+    // The constructor of this class 
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.black);
@@ -48,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable{
     private void update(){ 
     }
 
+    // This is the thing that you go to when you call repaint() 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g; 
