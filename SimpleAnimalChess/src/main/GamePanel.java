@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable{
     // The constructor of this class 
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setBackground(Color.black);
+        setBackground(Color.BLACK);
         setPieces();
         copyPieces(pieces, simPieces);
     }
@@ -60,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable{
         pieces.add(new Lion(RED, 0, 6));
         pieces.add(new Elephant(RED, 2, 0));
 
-        // // Blue team 
+        // Blue team 
         pieces.add(new Rat(BLUE, 6, 0)); 
         pieces.add(new Cat(BLUE, 7, 5));
         pieces.add(new Wolf(BLUE, 6, 4)); 
@@ -111,7 +111,6 @@ public class GamePanel extends JPanel implements Runnable{
         for(Piece p: simPieces){
             p.draw(g2); 
         }
-
     }
 
 }

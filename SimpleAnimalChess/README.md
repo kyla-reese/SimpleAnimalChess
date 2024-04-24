@@ -24,12 +24,4 @@ Main --> GamePanel --> Board
 
 ### SPECIFIC
 
-[1] Notes: changing the x and y (first two values in fillRect) changes where in the jPanel the board can be printed, you can manipulate this to force the board to print in middle of the screen
-[ 1 can be found inside Baord.java ]
-
-QUESTION
-
-- do i need to make a tile class?????
-
-TO DOs
-[] inside GamePanel, change first player to Black
+[1] Notes: When working with Graphics2D --> changing the x and y (first two values in fillRect) changes where in the jPanel the board can be printed, you can manipulate this to force the board to print in middle of the panel rather then starting from the left (ie. make col --> col + 1 or row --> row + 1)
