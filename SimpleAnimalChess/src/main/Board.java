@@ -14,41 +14,58 @@ public class Board {
     public static final int HALF_SQUARE_SIZE = SQUARE_SIZE/2; 
     final Color waterBlue = new Color(156, 222, 255); 
 
-    BufferedImage image = null; 
+    BufferedImage water = null; 
+    BufferedImage trap = null; 
+    BufferedImage den = null; 
 
-    // public Board(){
-    //     try{
-    //         image = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/tiles/water.png")); 
-    //     }catch(IOException e){
-    //         e.printStackTrace();
-    //     }
-    // }
+    public Board(){
+        try{
+            water = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/tile/water.png")); 
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        try{
+            trap = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/tile/trap.png")); 
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        try{
+            den = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/tile/den.png")); 
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 
     public void draw(Graphics2D g2){
         for(int row = 0; row < MAX_ROW; row++){
             for(int col = 0; col < MAX_COL; col++){ 
                 
-                // if(((row == 2 || row == 4) && (col == 0 || col == 8)) || (row == 3 && (col == 1 || col == 7))){
-                //     g2.setColor(Color.RED); // TRAPS
-                // }  
-                // else if(row == 3 && (col == 0 || col == 8)){
-                //     g2.setColor(Color.GREEN); // DENS
-                // } 
-                // else if((row == 1 || row == 2 || row == 4 || row == 5) && (col == 3 || col == 4 || col == 5)){
-                //     g2.setColor(waterBlue); // WATER
-                //     g2.drawImage(image, col*Board.SQUARE_SIZE, row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
-                // }
-                // else{
-                //     g2.setColor(Color.WHITE); // non speical pieces 
-                // }
+                if(((row == 2 || row == 4) && (col == 0 || col == 8)) || (row == 3 && (col == 1 || col == 7))){ // TRAPS 
+                    g2.setColor(Color.RED);
+                    g2.fillRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+                    g2.drawImage(trap, col*Board.SQUARE_SIZE, row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
+                }  
+                else if(row == 3 && (col == 0 || col == 8)){
+                    g2.setColor(Color.BLUE);
+                    g2.fillRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+                    g2.drawImage(den, col*Board.SQUARE_SIZE, row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
+                } 
+                else if((row == 1 || row == 2 || row == 4 || row == 5) && (col == 3 || col == 4 || col == 5)){ // WATER
+                    g2.setColor(waterBlue); 
+                    g2.fillRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+                    g2.drawImage(water, col*Board.SQUARE_SIZE, row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
+                }
+                else{ // non speical tiles
+                    g2.setColor(Color.PINK); 
+                    g2.fillRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+                }
 
                 // [1] Notes: changing the x and y (first two values in fillRect) changes where in the 
                 // jPanel the board can be printed, you can manipulate this to force the board to print in 
-                // middle of the screen 
-                
-                g2.fillRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-                g2.setColor(Color.PINK);
-                // g2.drawRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+                // middle of the screen
+
+                g2.setColor(Color.BLACK);
+                g2.drawRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
             }
         }
     }
