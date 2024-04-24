@@ -1,4 +1,5 @@
 package main;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int FPS = 60; 
 
     // Height and width of the board
-    public static final int WIDTH = 1200; 
+    public static final int WIDTH = 1300; 
     public static final int HEIGHT = 700; 
 
     // Color of the Pieces
@@ -27,17 +28,23 @@ public class GamePanel extends JPanel implements Runnable{
     public static final int BLUE = 1; 
     int currentColor = RED; 
 
-    // Arraylists of Pieces currently on the board
+    // Arraylists of Pieces currently on the board + active piece
     public static ArrayList<Piece> pieces = new ArrayList<>(); // <-- works like a back up list in case we wanna reset the changes the player made
     public static ArrayList<Piece> simPieces = new ArrayList<>(); 
+    Piece activeP; 
 
     Thread gameThread; 
     Board board = new Board(); // <-- instantiates the board 
+    Mouse mouse = new Mouse(); // <-- instantiates the mouse 
 
     // The constructor of this class 
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);
+        // allows program to detect the players mouse movements 
+        addMouseMotionListener(mouse);
+        addMouseListener(mouse);
+        // sets up the pieces 
         setPieces();
         copyPieces(pieces, simPieces);
     }
@@ -49,7 +56,6 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setPieces(){
-
         // Red team 
         pieces.add(new Rat(RED, 2, 6));
         pieces.add(new Cat(RED, 1, 1));
@@ -58,8 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
         pieces.add(new Leopard(RED, 2, 4));
         pieces.add(new Tiger(RED, 0, 0));
         pieces.add(new Lion(RED, 0, 6));
-        pieces.add(new Elephant(RED, 2, 0));
-
+        pieces.add(new Elephant(RED, 2, 0)); 
         // Blue team 
         pieces.add(new Rat(BLUE, 6, 0)); 
         pieces.add(new Cat(BLUE, 7, 5));
@@ -99,6 +104,39 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     private void update(){ 
+        // [1] Happens if mouse button is pressed 
+        if (mouse.pressed){ 
+            // if no active piece, check if player can pick up a piece 
+            if(activeP == null){ 
+                for(Piece piece: simPieces){
+                    // if the mouse is on an ally piece, pick it up as activeP 
+                    if(piece.color == currentColor && piece.col == mouse.x/Board.SQUARE_SIZE &&
+                                                        piece.row == mouse.y/Board.SQUARE_SIZE){
+                        activeP = piece; 
+                    }
+                }
+            }
+            else{
+                // if the player is holding a piece, simulate the move 
+                simulate(); 
+            }
+        }
+
+        // [2] Happens if mouse button is released 
+        if (mouse.pressed == false){
+            if(activeP != null){
+                activeP.updatePosition();
+                activeP = null; 
+            }
+        }
+    }
+
+    public void simulate(){
+        // If a piece is being held, update its position 
+        activeP.x = mouse.x - Board.HALF_SQUARE_SIZE; 
+        activeP.y = mouse.y - Board.HALF_SQUARE_SIZE; 
+        activeP.col = activeP.getCol(activeP.x); 
+        activeP.row = activeP.getRow(activeP.y); 
     }
 
     // This is the thing that you go to when you call repaint() 
@@ -110,6 +148,15 @@ public class GamePanel extends JPanel implements Runnable{
         // Draws the Pieces 
         for(Piece p: simPieces){
             p.draw(g2); 
+        }
+
+        if(activeP != null){
+            g2.setColor(Color.WHITE); 
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.20f));
+            g2.fillRect(activeP.col*Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); // <-- rests transparency 
+            // draw the active piece at the end so it won't be hidden by the board or the colored square
+            activeP.draw(g2);
         }
     }
 
