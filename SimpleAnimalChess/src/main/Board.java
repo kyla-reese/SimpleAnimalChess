@@ -45,7 +45,7 @@ public class Board {
                     g2.fillRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
                     g2.drawImage(trap, col*Board.SQUARE_SIZE, row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
                 }  
-                else if(row == 3 && (col == 0 || col == 8)){
+                else if(row == 3 && (col == 0 || col == 8)){ // DENS 
                     g2.setColor(Color.BLUE);
                     g2.fillRect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
                     g2.drawImage(den, col*Board.SQUARE_SIZE, row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
