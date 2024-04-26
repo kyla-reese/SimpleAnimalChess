@@ -25,3 +25,7 @@ Main --> GamePanel --> Board
 ### SPECIFIC
 
 [1] Notes: When working with Graphics2D --> changing the x and y (first two values in fillRect) changes where in the jPanel the board can be printed, you can manipulate this to force the board to print in middle of the panel rather then starting from the left (ie. make col --> col + 1 or row --> row + 1)
+
+canMove (in Piece superclass) -->
+isValidTile (different for everyone) -->
+tileIsOccupied (different for everyone) -->
