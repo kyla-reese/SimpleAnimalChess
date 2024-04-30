@@ -41,3 +41,5 @@ To Dos done:
 [ ] A mouse on ther river may not capture an elephant or another mouse on land
 [ ] A mouse on the river may capture another mouse on the river
 [ ] A mouse on land may not capture a mouse on the river
+
+tempPower for the animals????
