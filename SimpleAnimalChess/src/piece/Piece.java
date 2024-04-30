@@ -6,6 +6,8 @@ import javax.imageio.ImageIO;
 import java.io.FileInputStream;
 import main.Board;
 import main.GamePanel;
+import tile.Tile;
+import tile.Water;
 
 public class Piece {
     public BufferedImage image; 
@@ -13,11 +15,13 @@ public class Piece {
     public int col, row, preCol, preRow; 
     public int color; 
     public Piece hittingP; 
+    public int power; 
 
-    public Piece (int color, int col, int row){
+    public Piece (int color, int power, int col, int row){
         this.color = color; 
         this.col = col; 
         this.row = row; 
+        this.power = power; 
         x = getX(col); 
         y = getY(row); 
         preCol = col; 
@@ -73,19 +77,24 @@ public class Piece {
         y = getY(row); 
     }
 
-    public boolean canMove(int targetCol, int targetRow){ // validates if a piece's movements are legal (1, up down lef right)
+    public boolean canMove(int targetCol, int targetRow){ 
         if(isWithinBoard(targetCol, targetRow)){
-            if(Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1){ // one space, up down left or right 
-                if(isValidSquare(targetCol, targetRow)){
-                    return true;
-                } 
+            // checks if move is within one space: up, down, left, or right 
+            if(Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1){
+                if(!isGoingToWater(targetCol, targetRow)){
+                    if(!isGoingToInvalidDen(targetCol, targetRow)){
+                        if(isValidSquare(targetCol, targetRow)){
+                            return true;
+                        }
+                    }
+                }
             }
         }
         return false; 
     }
 
     public boolean isWithinBoard(int targetCol, int targetRow){
-        if(targetCol >= 0 && targetCol <= Board.MAX_COL && targetRow >= 0 && targetRow <= Board.MAX_ROW){
+        if(targetCol >= 0 && targetCol < Board.MAX_COL && targetRow >= 0 && targetRow < Board.MAX_ROW){
             return true; 
         }
         return false; 
@@ -106,12 +115,30 @@ public class Piece {
             return true;
         }
         else{
-            if(hittingP.color != this.color){
+            if(hittingP.color != this.color && hittingP.power <= this.power){
                 return true; 
             }
             else{
                 hittingP = null; 
             }
+        }
+        return false; 
+    }
+
+    public boolean isGoingToWater(int targetCol, int targetRow){
+        for(Tile tile: GamePanel.tiles){
+            if(tile.col == targetCol && tile.row == targetRow && tile instanceof Water)
+            return true; 
+        }
+        return false; 
+    }
+
+    public boolean isGoingToInvalidDen(int targetCol, int targetRow){
+        if(this.color == GamePanel.RED && targetRow == 3 && targetCol == 0){ // red going into red den
+            return true; 
+        }
+        else if(this.color == GamePanel.BLUE && targetRow == 3 && targetCol == 8){ // blue going into blue den
+            return true; 
         }
         return false; 
     }

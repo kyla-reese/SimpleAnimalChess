@@ -26,6 +26,18 @@ Main --> GamePanel --> Board
 
 [1] Notes: When working with Graphics2D --> changing the x and y (first two values in fillRect) changes where in the jPanel the board can be printed, you can manipulate this to force the board to print in middle of the panel rather then starting from the left (ie. make col --> col + 1 or row --> row + 1)
 
-canMove (in Piece superclass) -->
-isValidTile (different for everyone) -->
-tileIsOccupied (different for everyone) -->
+To Dos done:
+
+[ X ] only animals with greater or equal power may eat (does not account for mouse and elephant exception)
+[ X ] all pieces currently cannot go on water
+[ X ] mouse can swim in water
+[ X ] tigers and lions can now jump over water (does not account for mouse yet )
+[ X ] mouse in water means lion and tiger cannot jump water
+[ X ] a player can't move into its own den (all pieces now -- dapat)
+[ ] mouse can capture elephant
+[ ] elphant can't capture mouse
+[ ] trap functionalites
+[ ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
+[ ] A mouse on ther river may not capture an elephant or another mouse on land
+[ ] A mouse on the river may capture another mouse on the river
+[ ] A mouse on land may not capture a mouse on the river

@@ -9,7 +9,11 @@ import javax.swing.JPanel;
 import piece.Piece;
 import piece.Rat ; 
 import piece.Cat; 
-import piece.Wolf; 
+import piece.Wolf;
+import tile.Den;
+import tile.Tile;
+import tile.Trap;
+import tile.Water;
 import piece.Dog; 
 import piece.Leopard; 
 import piece.Tiger; 
@@ -32,14 +36,16 @@ public class GamePanel extends JPanel implements Runnable{
     boolean canMove; 
     boolean isValidSquare; 
 
-    // Arraylists of Pieces currently on the board + active piece
+    // Arraylists
     public static ArrayList<Piece> pieces = new ArrayList<>(); // <-- works like a back up list in case we wanna reset the changes the player made
     public static ArrayList<Piece> simPieces = new ArrayList<>(); 
+    public static ArrayList<Tile> tiles = new ArrayList<>(); 
     Piece activeP; 
 
+    // Instantiations 
     Thread gameThread; 
-    Board board = new Board(); // <-- instantiates the board 
-    Mouse mouse = new Mouse(); // <-- instantiates the mouse 
+    Board board = new Board(); 
+    Mouse mouse = new Mouse(); 
 
     // The constructor of this class 
     public GamePanel(){
@@ -48,9 +54,11 @@ public class GamePanel extends JPanel implements Runnable{
         // allows program to detect the players mouse movements 
         addMouseMotionListener(mouse);
         addMouseListener(mouse);
-        // sets up the pieces 
+        // sets up the pieces (initially)
         setPieces();
         copyPieces(pieces, simPieces);
+        // sets up board 
+        setBoard();
     }
 
     // Instantiates the thread 
@@ -59,25 +67,47 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();
     }
 
+    public void setBoard(){ 
+        for(int col = 0; col < Board.MAX_COL; col++){
+            for(int row = 0; row < Board.MAX_ROW; row++){
+                if(((row == 2 || row == 4) && (col == 0 || col == 8)) || (row == 3 && (col == 1 || col == 7))){
+                    tiles.add(new Trap(col, row));     
+                }
+                else if((row == 1 || row == 2 || row == 4 || row == 5) && (col == 3 || col == 4 || col == 5)){
+                    tiles.add(new Water(col, row)); 
+                }
+                else if(row == 3 && col == 0){
+                    tiles.add(new Den(col, row)); 
+                }
+                else if(row == 3 && col == 8){
+                    tiles.add(new Den(col, row)); 
+                }
+                else{
+                    tiles.add(new Tile(col, row));
+                } 
+            }
+        }
+    }
+
     public void setPieces(){
         // Red team 
-        pieces.add(new Rat(RED, 2, 6));
-        pieces.add(new Cat(RED, 1, 1));
-        pieces.add(new Wolf(RED, 2, 2)); 
-        pieces.add(new Dog(RED, 1, 5));
-        pieces.add(new Leopard(RED, 2, 4));
-        pieces.add(new Tiger(RED, 0, 0));
-        pieces.add(new Lion(RED, 0, 6));
-        pieces.add(new Elephant(RED, 2, 0)); 
+        pieces.add(new Rat  (RED, 1, 2, 6));
+        pieces.add(new Cat  (RED, 2, 1, 1));
+        pieces.add(new Wolf (RED, 3, 2, 2)); 
+        pieces.add(new Dog  (RED, 4, 1, 5));
+        pieces.add(new Leopard  (RED, 5, 2, 4));
+        pieces.add(new Tiger    (RED, 6, 0, 0));
+        pieces.add(new Lion     (RED, 7, 0, 6));
+        pieces.add(new Elephant (RED, 8, 2, 0)); 
         // Blue team 
-        pieces.add(new Rat(BLUE, 6, 0)); 
-        pieces.add(new Cat(BLUE, 7, 5));
-        pieces.add(new Wolf(BLUE, 6, 4)); 
-        pieces.add(new Dog(BLUE, 7, 1));
-        pieces.add(new Leopard(BLUE, 6, 2));
-        pieces.add(new Tiger(BLUE, 8, 6));
-        pieces.add(new Lion(BLUE, 8, 0));
-        pieces.add(new Elephant(BLUE, 6, 6)); 
+        pieces.add(new Rat  (BLUE, 1, 6, 0)); 
+        pieces.add(new Cat  (BLUE, 2, 7, 5));
+        pieces.add(new Wolf (BLUE, 3, 6, 4)); 
+        pieces.add(new Dog  (BLUE, 4, 7, 1));
+        pieces.add(new Leopard  (BLUE, 5, 6, 2));
+        pieces.add(new Tiger    (BLUE, 6, 8, 6));
+        pieces.add(new Lion     (BLUE, 7, 8, 0));
+        pieces.add(new Elephant (BLUE, 8, 6, 6)); 
     }
 
     private void copyPieces(ArrayList<Piece> source, ArrayList<Piece> target){
@@ -108,7 +138,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     private void update(){ 
-        // [1] Happens if mouse button is pressed 
+        // [1] IF MOUSE IS PRESSED 
         if (mouse.pressed){ 
             // if no active piece, check if player can pick up a piece 
             if(activeP == null){ 
@@ -126,12 +156,11 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
 
-        // [2] Happens if mouse button is released 
+        // [2] IF MOUSE IS RELEASED 
         if (mouse.pressed == false){
             if(activeP != null){
                 if(isValidSquare){ // <-- this is where we will put water
                     copyPieces(simPieces, pieces); // update the list in case piece has been captured and removed during the simulation 
-                    
                     activeP.updatePosition();
                 }
                 else{
@@ -173,6 +202,10 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g; 
+        // Draw the Tiles on the board
+        for(Tile t: tiles){
+            t.draw(g2); 
+        }
         // Draws the Board
         board.draw(g2);
         // Draws the Pieces (initially)
