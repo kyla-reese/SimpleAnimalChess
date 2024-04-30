@@ -145,7 +145,7 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D)g; 
         // Draws the Board
         board.draw(g2);
-        // Draws the Pieces 
+        // Draws the Pieces (initially)
         for(Piece p: simPieces){
             p.draw(g2); 
         }
