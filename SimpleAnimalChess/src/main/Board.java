@@ -8,8 +8,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Board {
-    final int MAX_COL = 9; 
-    final int MAX_ROW = 7; 
+    public static final int MAX_COL = 9; 
+    public static final int MAX_ROW = 7; 
     public static final int SQUARE_SIZE = 100; 
     public static final int HALF_SQUARE_SIZE = SQUARE_SIZE/2;  
     final Color lineColor = new Color(94,147,81); 

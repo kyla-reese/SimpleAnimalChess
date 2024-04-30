@@ -27,6 +27,10 @@ public class GamePanel extends JPanel implements Runnable{
     public static final int RED = 0; 
     public static final int BLUE = 1; 
     int currentColor = RED; 
+    
+    // Booleans
+    boolean canMove; 
+    boolean isValidSquare; 
 
     // Arraylists of Pieces currently on the board + active piece
     public static ArrayList<Piece> pieces = new ArrayList<>(); // <-- works like a back up list in case we wanna reset the changes the player made
@@ -125,18 +129,44 @@ public class GamePanel extends JPanel implements Runnable{
         // [2] Happens if mouse button is released 
         if (mouse.pressed == false){
             if(activeP != null){
-                activeP.updatePosition();
-                activeP = null; 
+                if(isValidSquare){ // <-- this is where we will put water
+                    copyPieces(simPieces, pieces); // update the list in case piece has been captured and removed during the simulation 
+                    
+                    activeP.updatePosition();
+                }
+                else{
+                    copyPieces(pieces, simPieces); // the move is not valid so reset everything 
+                    activeP.resetPosition(); 
+                    activeP = null;
+                } 
             }
         }
     }
 
     public void simulate(){
+        canMove = false; 
+        isValidSquare = false; 
+
+        // reset the piece list in every loop
+        // this is basically for restoring the remove piece during the simulation
+        copyPieces(pieces, simPieces); 
+
         // If a piece is being held, update its position 
         activeP.x = mouse.x - Board.HALF_SQUARE_SIZE; 
         activeP.y = mouse.y - Board.HALF_SQUARE_SIZE; 
         activeP.col = activeP.getCol(activeP.x); 
         activeP.row = activeP.getRow(activeP.y); 
+
+        // Check if piece is hovering over a reachable square
+        if(activeP.canMove(activeP.col, activeP.row)){
+            canMove = true; 
+            // if hitting a piece, remove it from the list 
+            if(activeP.hittingP != null){
+                // note: this removes the piece as you hover over it, this does not remove the piece upon release of mouse which is kinda what i want to do
+                simPieces.remove(activeP.hittingP); //<-- this is the part that lets them remove pieces 
+            }
+            isValidSquare = true; 
+        }
     }
 
     // This is the thing that you go to when you call repaint() 
@@ -151,10 +181,12 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
         if(activeP != null){
-            g2.setColor(Color.WHITE); 
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.20f));
-            g2.fillRect(activeP.col*Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); // <-- rests transparency 
+            if(canMove){
+                g2.setColor(Color.WHITE); 
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.20f));
+                g2.fillRect(activeP.col*Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); // <-- rests transparency 
+            }
             // draw the active piece at the end so it won't be hidden by the board or the colored square
             activeP.draw(g2);
         }
