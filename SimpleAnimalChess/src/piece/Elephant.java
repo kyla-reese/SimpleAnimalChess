@@ -12,5 +12,21 @@ public class Elephant extends Piece{
             image = getImage("b-elephant"); 
         }
     }
+
+    public boolean isValidSquare(int targetCol, int targetRow){
+        hittingP = getHittingP(targetCol, targetRow); 
+        if(hittingP == null){
+            return true;
+        }
+        else{
+            if(hittingP.color != this.color && (hittingP.power <= this.power && !(hittingP instanceof Rat))){
+                return true; 
+            }
+            else{
+                hittingP = null; 
+            }
+        }
+        return false; 
+    }
     
 }

@@ -34,8 +34,8 @@ To Dos done:
 [ X ] tigers and lions can now jump over water (does not account for mouse yet )
 [ X ] mouse in water means lion and tiger cannot jump water
 [ X ] a player can't move into its own den (all pieces now -- dapat)
-[ ] mouse can capture elephant
-[ ] elphant can't capture mouse
+[ X ] mouse can capture elephant
+[ X ] elphant can't capture mouse
 [ ] trap functionalites
 [ ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
 [ ] A mouse on ther river may not capture an elephant or another mouse on land
