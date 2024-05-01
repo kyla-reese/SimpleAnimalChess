@@ -108,6 +108,9 @@ public class GamePanel extends JPanel implements Runnable{
         pieces.add(new Tiger    (BLUE, 6, 8, 6));
         pieces.add(new Lion     (BLUE, 7, 8, 0));
         pieces.add(new Elephant (BLUE, 8, 6, 6)); 
+
+        pieces.add(new Elephant (BLUE, 8, 0, 2)); 
+        pieces.add(new Elephant (BLUE, 8, 8, 2)); 
     }
 
     private void copyPieces(ArrayList<Piece> source, ArrayList<Piece> target){

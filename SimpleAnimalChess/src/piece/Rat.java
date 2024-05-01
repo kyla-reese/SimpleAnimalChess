@@ -14,11 +14,12 @@ public class Rat extends Piece {
     }
 
     public boolean canMove(int targetCol, int targetRow){ 
+        boolean hittingPIsInTrap = otherIsInTrap(targetCol, targetRow); 
         if(isWithinBoard(targetCol, targetRow)){
             if(!isGoingToInvalidDen(targetCol, targetRow)){
                 // checks if move is within one space: up, down, left, or right 
                 if(Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1){
-                    if(isValidSquare(targetCol, targetRow)){
+                    if(isValidSquare(targetCol, targetRow, hittingPIsInTrap)){
                         return true;
                     }
                 }
@@ -27,13 +28,13 @@ public class Rat extends Piece {
         return false; 
     }
 
-    public boolean isValidSquare(int targetCol, int targetRow){
+    public boolean isValidSquare(int targetCol, int targetRow, boolean hittingPIsInTrap){
         hittingP = getHittingP(targetCol, targetRow); 
         if(hittingP == null){
             return true;
         }
         else{
-            if(hittingP.color != this.color && (hittingP.power <= this.power || (hittingP instanceof Elephant))){
+            if(hittingP.color != this.color && (hittingP.power <= this.power || hittingPIsInTrap || (hittingP instanceof Elephant))){
                 return true; 
             }
             else{

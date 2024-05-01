@@ -36,10 +36,14 @@ To Dos done:
 [ X ] a player can't move into its own den (all pieces now -- dapat)
 [ X ] mouse can capture elephant
 [ X ] elphant can't capture mouse
-[ ] trap functionalites
-[ ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
-[ ] A mouse on ther river may not capture an elephant or another mouse on land
+[ X ] trap functionalites (works for own traps only, im deciding that elephant still cant eat mouse tho, and mouse can still capture elphant -- obvs)
+[ ] A mouse on the river may not capture an elephant or another mouse on land
 [ ] A mouse on the river may capture another mouse on the river
 [ ] A mouse on land may not capture a mouse on the river
+
+[ ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
+[ ] does not switch turns yet
+[ ] does not end game (part of win state)
+[ ] side panel section of jpanel is still empty
 
 tempPower for the animals????

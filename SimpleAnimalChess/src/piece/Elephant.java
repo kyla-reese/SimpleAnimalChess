@@ -13,13 +13,13 @@ public class Elephant extends Piece{
         }
     }
 
-    public boolean isValidSquare(int targetCol, int targetRow){
+    public boolean isValidSquare(int targetCol, int targetRow, boolean hittingPIsInTrap){
         hittingP = getHittingP(targetCol, targetRow); 
         if(hittingP == null){
             return true;
         }
         else{
-            if(hittingP.color != this.color && (hittingP.power <= this.power && !(hittingP instanceof Rat))){
+            if(hittingP.color != this.color && ((hittingP.power <= this.power || hittingPIsInTrap) && !(hittingP instanceof Rat))){
                 return true; 
             }
             else{

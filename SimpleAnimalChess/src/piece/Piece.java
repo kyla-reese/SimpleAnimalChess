@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import main.Board;
 import main.GamePanel;
 import tile.Tile;
+import tile.Trap;
 import tile.Water;
 
 public class Piece {
@@ -78,12 +79,13 @@ public class Piece {
     }
 
     public boolean canMove(int targetCol, int targetRow){ 
+        boolean hittingPIsInTrap = otherIsInTrap(targetCol, targetRow); 
         if(isWithinBoard(targetCol, targetRow)){
             // checks if move is within one space: up, down, left, or right 
             if(Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1){
                 if(!isGoingToWater(targetCol, targetRow)){
                     if(!isGoingToInvalidDen(targetCol, targetRow)){
-                        if(isValidSquare(targetCol, targetRow)){
+                        if(isValidSquare(targetCol, targetRow, hittingPIsInTrap)){
                             return true;
                         }
                     }
@@ -109,13 +111,13 @@ public class Piece {
         return null; 
     }
 
-    public boolean isValidSquare(int targetCol, int targetRow){
+    public boolean isValidSquare(int targetCol, int targetRow, boolean hittingPIsInTrap){
         hittingP = getHittingP(targetCol, targetRow); 
         if(hittingP == null){
             return true;
         }
         else{
-            if(hittingP.color != this.color && hittingP.power <= this.power){
+            if(hittingP.color != this.color && (hittingP.power <= this.power || hittingPIsInTrap)){
                 return true; 
             }
             else{
@@ -127,8 +129,9 @@ public class Piece {
 
     public boolean isGoingToWater(int targetCol, int targetRow){
         for(Tile tile: GamePanel.tiles){
-            if(tile.col == targetCol && tile.row == targetRow && tile instanceof Water)
-            return true; 
+            if(tile.col == targetCol && tile.row == targetRow && tile instanceof Water){
+                return true; 
+            }
         }
         return false; 
     }
@@ -139,6 +142,20 @@ public class Piece {
         }
         else if(this.color == GamePanel.BLUE && targetRow == 3 && targetCol == 8){ // blue going into blue den
             return true; 
+        }
+        return false; 
+    }
+
+    public boolean otherIsInTrap(int targetCol, int targetRow){
+        for(Tile tile: GamePanel.tiles){
+            if(tile.col == targetCol && tile.row == targetRow && tile instanceof Trap){
+                if((tile.col >= 0 && targetCol <= 1) && this.color == GamePanel.RED){
+                    return true;
+                }
+                else if((tile.col >= 7 && targetCol <= 8) && this.color == GamePanel.BLUE){
+                    return true; 
+                }
+            }
         }
         return false; 
     }

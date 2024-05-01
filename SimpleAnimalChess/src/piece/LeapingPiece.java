@@ -13,6 +13,7 @@ public class LeapingPiece extends Piece{
     
     public boolean canMove(int targetCol, int targetRow){ 
         ArrayList<Tile> closestWaterTile = startedMoveNearWater(preCol, preRow); 
+        boolean hittingPIsInTrap = otherIsInTrap(targetCol, targetRow);
         if(isWithinBoard(targetCol, targetRow)){
             if(!isGoingToWater(targetCol, targetRow)){
                 if(!isGoingToInvalidDen(targetCol, targetRow)){
@@ -21,20 +22,20 @@ public class LeapingPiece extends Piece{
                         for (Tile tile: closestWaterTile){ 
                             // checks if the closest water tile is to its left or right 
                             if(tile.row == preRow && (Math.abs(targetRow - preRow) == 0 && Math.abs(targetCol - preCol) == (Board.WATER_WIDTH + 1))){
-                                if(isValidSquare(targetCol, targetRow) && !hasRat(tile, targetCol, targetRow)){
+                                if(isValidSquare(targetCol, targetRow, hittingPIsInTrap) && !hasRat(tile, targetCol, targetRow)){
                                     return true;
                                 }
                             }
                             // checks if the closest water tile above or below it 
                             else if (tile.col == preCol && (Math.abs(targetCol - preCol) == 0 && Math.abs(targetRow - preRow) == (Board.WATER_HEIGHT + 1))){
-                                if(isValidSquare(targetCol, targetRow) && !hasRat(tile, targetCol, targetRow)){
+                                if(isValidSquare(targetCol, targetRow, hittingPIsInTrap) && !hasRat(tile, targetCol, targetRow)){
                                     return true;
                                 }
                             }
                         }
                         // allows the piece to move in ways that aren't jumping over water despite being near water
                         if(Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1){
-                            if(isValidSquare(targetCol, targetRow)){
+                            if(isValidSquare(targetCol, targetRow, hittingPIsInTrap)){
                                 return true;
                             }
                         }
@@ -42,7 +43,7 @@ public class LeapingPiece extends Piece{
                     else{
                         // accounts for movement that happens far (more than one square away) from water
                         if(Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1){
-                            if(isValidSquare(targetCol, targetRow)){
+                            if(isValidSquare(targetCol, targetRow, hittingPIsInTrap)){
                                 return true;
                             }
                         }
