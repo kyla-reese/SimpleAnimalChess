@@ -30,30 +30,32 @@ public class Rat extends Piece {
         return false; 
     }
 
-    // public boolean isValidSquare(int targetCol, int targetRow){
-    //     hittingP = getHittingP(targetCol, targetRow); 
-    //     boolean hittingPIsInTrap = otherPIsInTrap(targetCol, targetRow); 
-    //     if(hittingP == null){
-    //         return true;
-    //     }
-    //     else{
-    //         if(hittingP.color != this.color && 
-    //             (hittingP.power <= this.power || hittingPIsInTrap || (hittingP instanceof Elephant))){
-    //             return true; 
-    //         }
-    //         else{
-    //             hittingP = null; 
-    //         }
-    //     }
-    //     return false; 
-    // }
+    public boolean isValidSquare(int targetCol, int targetRow){
+        hittingP = getHittingP(targetCol, targetRow); 
+        boolean hittingPIsInTrap = isInTrap(targetCol, targetRow); 
+        if(hittingP == null){
+            return true;
+        }
+        else{
+            if(hittingP.color != this.color && 
+                (hittingP.power <= this.power || hittingPIsInTrap || (hittingP instanceof Elephant)) &&
+                ((isInWater(preCol, preRow) && isInWater(targetCol, targetRow)) || 
+                (!isInWater(preCol, preRow) && !isInWater(targetCol, targetRow)))){
+                return true; 
+            }
+            else{
+                hittingP = null; 
+            }
+        }
+        return false; 
+    }
 
-    // public boolean isInWater(int col, int row){
-    //     for(Tile tile: GamePanel.tiles){
-    //         if(tile.col == col && tile.row == row && tile instanceof Water){
-    //             return true; 
-    //         } 
-    //     }
-    //     return false; 
-    // }
+    public boolean isInWater(int col, int row){
+        for(Tile tile: GamePanel.tiles){
+            if(tile.col == col && tile.row == row && tile instanceof Water){
+                return true; 
+            } 
+        }
+        return false; 
+    }
 }

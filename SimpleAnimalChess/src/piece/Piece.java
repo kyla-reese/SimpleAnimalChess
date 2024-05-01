@@ -112,7 +112,7 @@ public class Piece {
 
     public boolean isValidSquare(int targetCol, int targetRow){
         hittingP = getHittingP(targetCol, targetRow); 
-        boolean hittingPIsInTrap = otherPIsInTrap(targetCol, targetRow); 
+        boolean hittingPIsInTrap = isInTrap(targetCol, targetRow); 
         if(hittingP == null){
             return true;
         }
@@ -146,13 +146,13 @@ public class Piece {
         return false; 
     }
 
-    public boolean otherPIsInTrap(int targetCol, int targetRow){
+    public boolean isInTrap(int col, int row){
         for(Tile tile: GamePanel.tiles){
-            if(tile.col == targetCol && tile.row == targetRow && tile instanceof Trap){
-                if((tile.col >= 0 && targetCol <= 1) && this.color == GamePanel.RED){
+            if(tile.col == col && tile.row == row && tile instanceof Trap){
+                if((tile.col >= 0 && col <= 1) && this.color == GamePanel.RED){
                     return true;
                 }
-                else if((tile.col >= 7 && targetCol <= 8) && this.color == GamePanel.BLUE){
+                else if((tile.col >= 7 && col <= 8) && this.color == GamePanel.BLUE){
                     return true; 
                 }
             }

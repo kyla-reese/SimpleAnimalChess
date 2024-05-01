@@ -15,7 +15,7 @@ public class Elephant extends Piece{
 
     public boolean isValidSquare(int targetCol, int targetRow){
         hittingP = getHittingP(targetCol, targetRow); 
-        boolean hittingPIsInTrap = otherPIsInTrap(targetCol, targetRow); 
+        boolean hittingPIsInTrap = isInTrap(targetCol, targetRow); 
         if(hittingP == null){
             return true;
         }
