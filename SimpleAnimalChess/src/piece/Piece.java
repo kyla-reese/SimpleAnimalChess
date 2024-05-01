@@ -78,14 +78,13 @@ public class Piece {
         y = getY(row); 
     }
 
-    public boolean canMove(int targetCol, int targetRow){ 
-        boolean hittingPIsInTrap = otherIsInTrap(targetCol, targetRow); 
+    public boolean canMove(int targetCol, int targetRow){  
         if(isWithinBoard(targetCol, targetRow)){
             // checks if move is within one space: up, down, left, or right 
             if(Math.abs(targetCol - preCol) + Math.abs(targetRow - preRow) == 1){
                 if(!isGoingToWater(targetCol, targetRow)){
                     if(!isGoingToInvalidDen(targetCol, targetRow)){
-                        if(isValidSquare(targetCol, targetRow, hittingPIsInTrap)){
+                        if(isValidSquare(targetCol, targetRow)){
                             return true;
                         }
                     }
@@ -111,8 +110,9 @@ public class Piece {
         return null; 
     }
 
-    public boolean isValidSquare(int targetCol, int targetRow, boolean hittingPIsInTrap){
+    public boolean isValidSquare(int targetCol, int targetRow){
         hittingP = getHittingP(targetCol, targetRow); 
+        boolean hittingPIsInTrap = otherPIsInTrap(targetCol, targetRow); 
         if(hittingP == null){
             return true;
         }
@@ -146,7 +146,7 @@ public class Piece {
         return false; 
     }
 
-    public boolean otherIsInTrap(int targetCol, int targetRow){
+    public boolean otherPIsInTrap(int targetCol, int targetRow){
         for(Tile tile: GamePanel.tiles){
             if(tile.col == targetCol && tile.row == targetRow && tile instanceof Trap){
                 if((tile.col >= 0 && targetCol <= 1) && this.color == GamePanel.RED){
