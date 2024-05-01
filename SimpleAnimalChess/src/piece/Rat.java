@@ -2,7 +2,6 @@ package piece;
 
 import main.GamePanel;
 import tile.Tile;
-import tile.Trap;
 import tile.Water;
 
 public class Rat extends Piece {
