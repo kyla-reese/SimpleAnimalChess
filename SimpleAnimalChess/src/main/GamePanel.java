@@ -239,18 +239,6 @@ public class GamePanel extends JPanel implements Runnable{
             activeP.draw(g2);
         }
 
-        // //STATUS MESSAEGE 
-        // g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        // g2.setFont(new Font("Book Antiqua", Font.PLAIN, 40)); 
-        // g2.setColor(Color.WHITE);
-
-        // if(currentColor == RED){
-        //     g2.drawString("Red's Turn", 940, 70);
-        // }
-        // else{
-        //     g2.drawString("Blue's Turn", 940, 70);
-        // }
-
         // SIDE PANEL VINES 
         BufferedImage vines = null; 
         try{
@@ -259,5 +247,14 @@ public class GamePanel extends JPanel implements Runnable{
             e.printStackTrace();
         }
         g2.drawImage(vines, 900, 0, (Board.SQUARE_SIZE*4), Board.SQUARE_SIZE, null); 
+
+        // BLUE TURN 
+        BufferedImage blueturn = null; 
+        try{
+            blueturn = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/blueturn.png")); 
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        g2.drawImage(blueturn, 900, 100, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*6), null); 
     }
 }
