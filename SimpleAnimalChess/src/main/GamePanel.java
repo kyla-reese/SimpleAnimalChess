@@ -1,10 +1,6 @@
 package main;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.ArrayList; 
 import javax.swing.JPanel;
 import piece.Piece;
 import piece.Rat ; 
@@ -108,9 +104,6 @@ public class GamePanel extends JPanel implements Runnable{
         pieces.add(new Tiger    (BLUE, 6, 8, 6));
         pieces.add(new Lion     (BLUE, 7, 8, 0));
         pieces.add(new Elephant (BLUE, 8, 6, 6)); 
-
-        pieces.add(new Rat (BLUE, 1, 3, 3)); 
-        pieces.add(new Rat (BLUE, 1, 4, 5)); 
     }
 
     private void copyPieces(ArrayList<Piece> source, ArrayList<Piece> target){
@@ -162,9 +155,11 @@ public class GamePanel extends JPanel implements Runnable{
         // [2] IF MOUSE IS RELEASED 
         if (mouse.pressed == false){
             if(activeP != null){
-                if(isValidSquare){ // <-- this is where we will put water
+                if(isValidSquare){ 
+                    // MOVE IS CONFIRMED
                     copyPieces(simPieces, pieces); // update the list in case piece has been captured and removed during the simulation 
                     activeP.updatePosition();
+                    changePlayer();
                 }
                 else{
                     copyPieces(pieces, simPieces); // the move is not valid so reset everything 
@@ -201,6 +196,16 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    public void changePlayer(){
+        if(currentColor == RED){
+            currentColor = BLUE; 
+        }
+        else{
+            currentColor = RED; 
+        }
+        activeP = null; 
+    }
+
     // This is the thing that you go to when you call repaint() 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -226,6 +231,17 @@ public class GamePanel extends JPanel implements Runnable{
             // draw the active piece at the end so it won't be hidden by the board or the colored square
             activeP.draw(g2);
         }
-    }
 
+        //STATUS MESSAEGE 
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setFont(new Font("Book Antiqua", Font.PLAIN, 40)); 
+        g2.setColor(Color.WHITE);
+
+        if(currentColor == RED){
+            g2.drawString("Red's Turn", 940, 70);
+        }
+        else{
+            g2.drawString("Blue's Turn", 940, 70);
+        }
+    }
 }

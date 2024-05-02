@@ -42,9 +42,9 @@ To Dos done:
 [ X ] A mouse on the river may not capture an elephant or another mouse on land
 [ X ] A mouse on the river may capture another mouse on the river
 [ X ] A mouse on land may not capture a mouse on the river
+[ X ] switches turns already
 
 [ ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
-[ ] does not switch turns yet
 [ ] does not end game (part of win state)
 [ ] side panel section of jpanel is still empty
 
