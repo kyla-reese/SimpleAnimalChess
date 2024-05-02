@@ -1,7 +1,10 @@
 package main;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList; 
 import javax.swing.JPanel;
+import javax.imageio.ImageIO;
 import piece.Piece;
 import piece.Rat ; 
 import piece.Cat; 
@@ -16,8 +19,12 @@ import piece.Tiger;
 import piece.Lion; 
 import piece.Elephant; 
 
+
 public class GamePanel extends JPanel implements Runnable{
     final int FPS = 60; 
+
+    // Side Panel Colors 
+    final Color sidePanelColor = new Color(225,234,169);
 
     // Height and width of the board
     public static final int WIDTH = 1300; 
@@ -46,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable{
     // The constructor of this class 
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setBackground(Color.BLACK);
+        setBackground(sidePanelColor);
         // allows program to detect the players mouse movements 
         addMouseMotionListener(mouse);
         addMouseListener(mouse);
@@ -232,16 +239,25 @@ public class GamePanel extends JPanel implements Runnable{
             activeP.draw(g2);
         }
 
-        //STATUS MESSAEGE 
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.setFont(new Font("Book Antiqua", Font.PLAIN, 40)); 
-        g2.setColor(Color.WHITE);
+        // //STATUS MESSAEGE 
+        // g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        // g2.setFont(new Font("Book Antiqua", Font.PLAIN, 40)); 
+        // g2.setColor(Color.WHITE);
 
-        if(currentColor == RED){
-            g2.drawString("Red's Turn", 940, 70);
+        // if(currentColor == RED){
+        //     g2.drawString("Red's Turn", 940, 70);
+        // }
+        // else{
+        //     g2.drawString("Blue's Turn", 940, 70);
+        // }
+
+        // SIDE PANEL VINES 
+        BufferedImage vines = null; 
+        try{
+            vines = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/vines.png")); 
+        }catch(IOException e){
+            e.printStackTrace();
         }
-        else{
-            g2.drawString("Blue's Turn", 940, 70);
-        }
+        g2.drawImage(vines, 900, 0, (Board.SQUARE_SIZE*4), Board.SQUARE_SIZE, null); 
     }
 }
