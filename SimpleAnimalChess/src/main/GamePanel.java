@@ -246,15 +246,22 @@ public class GamePanel extends JPanel implements Runnable{
         }catch(IOException e){
             e.printStackTrace();
         }
-        g2.drawImage(vines, 900, 0, (Board.SQUARE_SIZE*4), Board.SQUARE_SIZE, null); 
+        g2.drawImage(vines, 900, 0, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*2), null); 
 
-        // BLUE TURN 
-        BufferedImage blueturn = null; 
+        // SIDE PANEL TURN IMAGES  
+        BufferedImage turnImage = null; 
+        String imagePath;
+        if(currentColor == RED){
+            imagePath = "redturn"; 
+        }
+        else{
+            imagePath = "blueTurn"; 
+        }
         try{
-            blueturn = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/blueturn.png")); 
+            turnImage = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/" + imagePath + ".png")); 
         }catch(IOException e){
             e.printStackTrace();
         }
-        g2.drawImage(blueturn, 900, 100, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*6), null); 
+        g2.drawImage(turnImage, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*5), null); 
     }
 }
