@@ -160,6 +160,16 @@ public class Piece {
         return false; 
     }
 
+    public boolean isInOpponentsDen(int targetCol, int targetRow){
+        if(this.color == GamePanel.RED && targetRow == 3 && targetCol == 8){ // red going into blue den
+            return true; 
+        }
+        else if(this.color == GamePanel.BLUE && targetRow == 3 && targetCol == 0){ // blue going into red den
+            return true; 
+        }
+        return false; 
+    }
+
     public void draw(Graphics2D g2){
         g2.drawImage(image, x, y, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null); 
     }

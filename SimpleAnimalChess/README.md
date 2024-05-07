@@ -43,9 +43,13 @@ To Dos done:
 [ X ] A mouse on the river may capture another mouse on the river
 [ X ] A mouse on land may not capture a mouse on the river
 [ X ] switches turns already
+[ X ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
+[ X ] does not end game (part of win state)
+[ X ] side panel section of jpanel is still empty
+[ ] the win is pretty spaghetti as of rn, make it cleaner but it works as is
 
-[ ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
-[ ] does not end game (part of win state)
-[ ] side panel section of jpanel is still empty
+### Credits
 
-tempPower for the animals????
+Art by: irasutoya (taken from Canva free graphics)
+Font: https://www.1001fonts.com/more-sugar-font.html
+Design: Me

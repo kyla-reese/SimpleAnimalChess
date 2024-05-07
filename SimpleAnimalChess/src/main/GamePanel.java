@@ -23,13 +23,24 @@ import piece.Elephant;
 public class GamePanel extends JPanel implements Runnable{
     final int FPS = 60;
 
-    // Side Panel Colors 
+    // Colors 
     final Color sidePanelColor = new Color(225,234,169);
+    final Color redTeam = new Color(255,87,87); 
+    final Color blueTeam = new Color(83,113,254); 
 
     // Side Panel Images 
     BufferedImage vines = null; 
     BufferedImage backgrass = null; 
     BufferedImage frontgrass = null; 
+    BufferedImage speechbubble = null; 
+    BufferedImage bluebird = null; 
+    BufferedImage redbird = null; 
+    BufferedImage bluewin = null; 
+    BufferedImage redwin = null; 
+
+    // Font 
+    Font moreSugar; 
+    Font newFont; 
 
     // Height and width of the board
     public static final int WIDTH = 1300; 
@@ -43,6 +54,8 @@ public class GamePanel extends JPanel implements Runnable{
     // Booleans
     boolean canMove; 
     boolean isValidSquare; 
+    boolean hasWon;  
+    boolean gameIsOver = false; 
 
     // Arraylists
     public static ArrayList<Piece> pieces = new ArrayList<>(); // <-- works like a back up list in case we wanna reset the changes the player made
@@ -69,6 +82,15 @@ public class GamePanel extends JPanel implements Runnable{
         setBoard();
         // gets all the images needed for the side panel 
         getPanelImages(); 
+        // set up the custom font
+        try{
+            moreSugar = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("SimpleAnimalChess/res/font/more-sugar.regular.ttf")); 
+        }catch(FontFormatException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        newFont = moreSugar.deriveFont(moreSugar.getSize() * 45F);
     }
 
     // Instantiates the thread 
@@ -149,7 +171,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     private void update(){ 
         // [1] IF MOUSE IS PRESSED 
-        if (mouse.pressed){ 
+        if (mouse.pressed && !gameIsOver){ 
             // if no active piece, check if player can pick up a piece 
             if(activeP == null){ 
                 for(Piece piece: simPieces){
@@ -179,7 +201,12 @@ public class GamePanel extends JPanel implements Runnable{
                     copyPieces(pieces, simPieces); // the move is not valid so reset everything 
                     activeP.resetPosition(); 
                     activeP = null;
-                } 
+                }     
+
+                if(hasWon){
+                    gameIsOver = true; 
+                    changePlayer();
+                }
             }
         }
     }
@@ -187,6 +214,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void simulate(){
         canMove = false; 
         isValidSquare = false; 
+        hasWon = false; 
 
         // reset the piece list in every loop
         // this is basically for restoring the remove piece during the simulation
@@ -205,6 +233,9 @@ public class GamePanel extends JPanel implements Runnable{
             if(activeP.hittingP != null){
                 // note: this removes the piece as you hover over it, this does not remove the piece upon release of mouse which is kinda what i want to do
                 simPieces.remove(activeP.hittingP); //<-- this is the part that lets them remove pieces 
+            }
+            if(activeP.isInOpponentsDen(activeP.col, activeP.row)){
+                hasWon = true; 
             }
             isValidSquare = true; 
         }
@@ -225,9 +256,30 @@ public class GamePanel extends JPanel implements Runnable{
             vines = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/vines.png"));
             backgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/backgrass.png")); 
             frontgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/frontgrass.png"));
+            speechbubble = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/speechbubble.png"));
+            bluebird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluebird.png"));
+            redbird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redbird.png"));
+            bluewin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluewin.png"));
+            redwin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redwin.png"));
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public BufferedImage winOrTurn(){
+        if(currentColor == BLUE && !hasWon){
+            return bluebird; 
+        }
+        else if(currentColor == RED && !hasWon){
+            return redbird; 
+        }
+        else if(currentColor == RED && hasWon){
+            return redwin; 
+        }
+        else if(currentColor == BLUE && hasWon){
+            return bluewin; 
+        }
+        return null; 
     }
 
     // This is the thing that you go to when you call repaint() 
@@ -252,6 +304,33 @@ public class GamePanel extends JPanel implements Runnable{
         if(frontgrass != null){
             g2.drawImage(frontgrass, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*5), null); 
         }
+        if(speechbubble != null){
+            g2.drawImage(speechbubble, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*2), null);
+        }
+        BufferedImage mainImage = winOrTurn(); 
+        if(mainImage != null){
+            g2.drawImage(mainImage, 900, 400, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*3), null);
+        }
+
+
+        // Status Message
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setFont(newFont); 
+        if(currentColor == RED){
+            g2.setColor(redTeam);
+            g2.drawString("RED", 1070, 290);
+        }else{
+            g2.setColor(blueTeam);
+            g2.drawString("BLUE", 1058, 290);
+        }
+        g2.setColor(Color.WHITE);
+
+        if(hasWon){
+            g2.drawString("WIN", 1070, 340);
+        }
+        else{
+            g2.drawString("TURN", 1050, 340);
+        }
 
         // Draws the Pieces (initially)
         for(Piece p: simPieces){
@@ -268,23 +347,5 @@ public class GamePanel extends JPanel implements Runnable{
             // draw the active piece at the end so it won't be hidden by the board or the colored square
             activeP.draw(g2);
         }
-        
-
-        // SIDE PANEL TURN IMAGES  
-        // BufferedImage turnImage = null; 
-        // String imagePath;
-        // if(currentColor == RED){
-        //     imagePath = "redturn"; 
-        // }
-        // else{
-        //     imagePath = "blueTurn"; 
-        // }
-        // try{
-        //     turnImage = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/" + imagePath + ".png")); 
-        // }catch(IOException e){
-        //     e.printStackTrace();
-        // }
-        // g2.drawImage(turnImage, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*5), null); 
-
     }
 }
