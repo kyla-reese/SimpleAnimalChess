@@ -21,10 +21,15 @@ import piece.Elephant;
 
 
 public class GamePanel extends JPanel implements Runnable{
-    final int FPS = 60; 
+    final int FPS = 60;
 
     // Side Panel Colors 
     final Color sidePanelColor = new Color(225,234,169);
+
+    // Side Panel Images 
+    BufferedImage vines = null; 
+    BufferedImage backgrass = null; 
+    BufferedImage frontgrass = null; 
 
     // Height and width of the board
     public static final int WIDTH = 1300; 
@@ -62,6 +67,8 @@ public class GamePanel extends JPanel implements Runnable{
         copyPieces(pieces, simPieces);
         // sets up board 
         setBoard();
+        // gets all the images needed for the side panel 
+        getPanelImages(); 
     }
 
     // Instantiates the thread 
@@ -213,16 +220,39 @@ public class GamePanel extends JPanel implements Runnable{
         activeP = null; 
     }
 
+    public void getPanelImages(){
+        try{
+            vines = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/vines.png"));
+            backgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/backgrass.png")); 
+            frontgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/frontgrass.png"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     // This is the thing that you go to when you call repaint() 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g; 
+
         // Draw the Tiles on the board
         for(Tile t: tiles){
             t.draw(g2); 
         }
         // Draws the Board
         board.draw(g2);
+
+        // Draw the side panel
+        if(vines != null){
+            g2.drawImage(vines, 900, 0, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*2), null);
+        }
+        if(backgrass != null){ 
+            g2.drawImage(backgrass, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*5), null); 
+        }
+        if(frontgrass != null){
+            g2.drawImage(frontgrass, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*5), null); 
+        }
+
         // Draws the Pieces (initially)
         for(Piece p: simPieces){
             p.draw(g2); 
@@ -238,30 +268,23 @@ public class GamePanel extends JPanel implements Runnable{
             // draw the active piece at the end so it won't be hidden by the board or the colored square
             activeP.draw(g2);
         }
-
-        // SIDE PANEL VINES 
-        BufferedImage vines = null; 
-        try{
-            vines = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/vines.png")); 
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        g2.drawImage(vines, 900, 0, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*2), null); 
+        
 
         // SIDE PANEL TURN IMAGES  
-        BufferedImage turnImage = null; 
-        String imagePath;
-        if(currentColor == RED){
-            imagePath = "redturn"; 
-        }
-        else{
-            imagePath = "blueTurn"; 
-        }
-        try{
-            turnImage = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/" + imagePath + ".png")); 
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        g2.drawImage(turnImage, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*5), null); 
+        // BufferedImage turnImage = null; 
+        // String imagePath;
+        // if(currentColor == RED){
+        //     imagePath = "redturn"; 
+        // }
+        // else{
+        //     imagePath = "blueTurn"; 
+        // }
+        // try{
+        //     turnImage = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/" + imagePath + ".png")); 
+        // }catch(IOException e){
+        //     e.printStackTrace();
+        // }
+        // g2.drawImage(turnImage, 900, 200, (Board.SQUARE_SIZE*4), (Board.SQUARE_SIZE*5), null); 
+
     }
 }
