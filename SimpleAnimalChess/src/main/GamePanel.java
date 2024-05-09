@@ -9,15 +9,15 @@ import piece.Piece;
 import piece.Rat ; 
 import piece.Cat; 
 import piece.Wolf;
-import tile.Den;
-import tile.Tile;
-import tile.Trap;
-import tile.Water;
 import piece.Dog; 
 import piece.Leopard; 
 import piece.Tiger; 
 import piece.Lion; 
 import piece.Elephant; 
+import tile.Den;
+import tile.Tile;
+import tile.Trap;
+import tile.Water;
 
 
 public class GamePanel extends JPanel implements Runnable{
@@ -40,7 +40,6 @@ public class GamePanel extends JPanel implements Runnable{
 
     // Font 
     Font moreSugar; 
-    Font newFont; 
 
     // Height and width of the board
     public static final int WIDTH = 1300; 
@@ -83,42 +82,13 @@ public class GamePanel extends JPanel implements Runnable{
         // gets all the images needed for the side panel 
         getPanelImages(); 
         // set up the custom font
-        try{
-            moreSugar = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("SimpleAnimalChess/res/font/more-sugar.regular.ttf")); 
-        }catch(FontFormatException e){
-            e.printStackTrace();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        newFont = moreSugar.deriveFont(moreSugar.getSize() * 45F);
+        moreSugar = getNewFont("more-sugar.regular", 45F); 
     }
 
     // Instantiates the thread 
     public void launchGame(){
         gameThread = new Thread(this); 
         gameThread.start();
-    }
-
-    public void setBoard(){ 
-        for(int col = 0; col < Board.MAX_COL; col++){
-            for(int row = 0; row < Board.MAX_ROW; row++){
-                if(((row == 2 || row == 4) && (col == 0 || col == 8)) || (row == 3 && (col == 1 || col == 7))){
-                    tiles.add(new Trap(col, row));     
-                }
-                else if((row == 1 || row == 2 || row == 4 || row == 5) && (col == 3 || col == 4 || col == 5)){
-                    tiles.add(new Water(col, row)); 
-                }
-                else if(row == 3 && col == 0){
-                    tiles.add(new Den(col, row)); 
-                }
-                else if(row == 3 && col == 8){
-                    tiles.add(new Den(col, row)); 
-                }
-                else{
-                    tiles.add(new Tile(col, row));
-                } 
-            }
-        }
     }
 
     public void setPieces(){
@@ -149,10 +119,61 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    public void setBoard(){ 
+        for(int col = 0; col < Board.MAX_COL; col++){
+            for(int row = 0; row < Board.MAX_ROW; row++){
+                if(((row == 2 || row == 4) && (col == 0 || col == 8)) || (row == 3 && (col == 1 || col == 7))){
+                    tiles.add(new Trap(col, row));     
+                }
+                else if((row == 1 || row == 2 || row == 4 || row == 5) && (col == 3 || col == 4 || col == 5)){
+                    tiles.add(new Water(col, row)); 
+                }
+                else if(row == 3 && col == 0){ // red den
+                    tiles.add(new Den(col, row)); 
+                }
+                else if(row == 3 && col == 8){ // blue den
+                    tiles.add(new Den(col, row)); 
+                }
+                else{
+                    tiles.add(new Tile(col, row));
+                } 
+            }
+        }
+    }
+
+    public void getPanelImages(){
+        try{
+            vines = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/vines.png"));
+            backgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/backgrass.png")); 
+            frontgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/frontgrass.png"));
+            speechbubble = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/speechbubble.png"));
+            bluebird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluebird.png"));
+            redbird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redbird.png"));
+            bluewin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluewin.png"));
+            redwin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redwin.png"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public Font getNewFont(String fontPath, float size){
+        Font font = null; 
+        Font resizedFont = null; 
+        try{
+            font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("SimpleAnimalChess/res/font/"+ fontPath +".ttf")); 
+        }catch(FontFormatException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        resizedFont = font.deriveFont(font.getSize() * size);
+        return resizedFont;
+    }
+
     // When we run launch game, it goes to here, this is where the game loop happens 
     @Override
     public void run() {
-        //GAME LOOP -- there's more than one way to make a game loop for this 
+        //GAME LOOP
         double drawInterval = 1000000000/FPS; 
         double delta = 0; 
         long lastTime = System.nanoTime(); 
@@ -172,8 +193,7 @@ public class GamePanel extends JPanel implements Runnable{
     private void update(){ 
         // [1] IF MOUSE IS PRESSED 
         if (mouse.pressed && !gameIsOver){ 
-            // if no active piece, check if player can pick up a piece 
-            if(activeP == null){ 
+            if(activeP == null){ // <-- if no active piece, check if player can pick up a piece 
                 for(Piece piece: simPieces){
                     // if the mouse is on an ally piece, pick it up as activeP 
                     if(piece.color == currentColor && piece.col == mouse.x/Board.SQUARE_SIZE &&
@@ -249,37 +269,6 @@ public class GamePanel extends JPanel implements Runnable{
         activeP = null; 
     }
 
-    public void getPanelImages(){
-        try{
-            vines = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/vines.png"));
-            backgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/backgrass.png")); 
-            frontgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/frontgrass.png"));
-            speechbubble = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/speechbubble.png"));
-            bluebird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluebird.png"));
-            redbird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redbird.png"));
-            bluewin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluewin.png"));
-            redwin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redwin.png"));
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    public BufferedImage winOrTurn(){
-        if(currentColor == BLUE && !hasWon){
-            return bluebird; 
-        }
-        else if(currentColor == RED && !hasWon){
-            return redbird; 
-        }
-        else if(currentColor == RED && hasWon){
-            return redwin; 
-        }
-        else if(currentColor == BLUE && hasWon ){
-            return bluewin; 
-        }
-        return null; 
-    }
-
     // This is the thing that you go to when you call repaint() 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -313,7 +302,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         // Status Message
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.setFont(newFont); 
+        g2.setFont(moreSugar); 
         if(currentColor == RED){
             g2.setColor(redTeam);
             g2.drawString("RED", 1070, 290);
@@ -345,5 +334,21 @@ public class GamePanel extends JPanel implements Runnable{
             // draw the active piece at the end so it won't be hidden by the board or the colored square
             activeP.draw(g2);
         }
+    }
+
+    public BufferedImage winOrTurn(){
+        if(currentColor == BLUE && !hasWon){
+            return bluebird; 
+        }
+        else if(currentColor == RED && !hasWon){
+            return redbird; 
+        }
+        else if(currentColor == RED && hasWon){
+            return redwin; 
+        }
+        else if(currentColor == BLUE && hasWon ){
+            return bluewin; 
+        }
+        return null; 
     }
 }
