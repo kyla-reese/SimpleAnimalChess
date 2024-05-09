@@ -54,8 +54,8 @@ public class GamePanel extends JPanel implements Runnable{
     // Booleans
     boolean canMove; 
     boolean isValidSquare; 
-    // boolean hasWon = false;  
-    // boolean gameIsOver = false; 
+    boolean hasWon = false;  
+    boolean gameIsOver = false; 
 
     // Arraylists
     public static ArrayList<Piece> pieces = new ArrayList<>(); // <-- works like a back up list in case we wanna reset the changes the player made
@@ -171,7 +171,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     private void update(){ 
         // [1] IF MOUSE IS PRESSED 
-        if (mouse.pressed /*&& !gameIsOver*/){ 
+        if (mouse.pressed && !gameIsOver){ 
             // if no active piece, check if player can pick up a piece 
             if(activeP == null){ 
                 for(Piece piece: simPieces){
@@ -202,11 +202,10 @@ public class GamePanel extends JPanel implements Runnable{
                     activeP.resetPosition(); 
                     activeP = null;
                 }     
-
-                // if(hasWon){
-                //     gameIsOver = true; 
-                //     changePlayer();
-                // }
+                if(hasWon){
+                    gameIsOver = true; 
+                    changePlayer();
+                }
             }
         }
     }
@@ -233,9 +232,9 @@ public class GamePanel extends JPanel implements Runnable{
                 // note: this removes the piece as you hover over it, this does not remove the piece upon release of mouse which is kinda what i want to do
                 simPieces.remove(activeP.hittingP); //<-- this is the part that lets them remove pieces 
             }
-            // if(activeP.isInOpponentsDen(activeP.col, activeP.row)){
-            //     hasWon = true; 
-            // }
+            if(activeP.isInOpponentsDen(activeP.col, activeP.row)){
+                hasWon = true; 
+            }
             isValidSquare = true; 
         }
     }
@@ -266,18 +265,18 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public BufferedImage winOrTurn(){
-        if(currentColor == BLUE /* && !hasWon*/){
+        if(currentColor == BLUE && !hasWon){
             return bluebird; 
         }
-        else if(currentColor == RED /* && !hasWon*/){
+        else if(currentColor == RED && !hasWon){
             return redbird; 
         }
-        // else if(currentColor == RED /*&& hasWon*/){
-        //     return redwin; 
-        // }
-        // else if(currentColor == BLUE /*&& hasWon*/){
-        //     return bluewin; 
-        // }
+        else if(currentColor == RED && hasWon){
+            return redwin; 
+        }
+        else if(currentColor == BLUE && hasWon ){
+            return bluewin; 
+        }
         return null; 
     }
 
@@ -324,12 +323,12 @@ public class GamePanel extends JPanel implements Runnable{
         }
         g2.setColor(Color.WHITE);
 
-        // if(hasWon){
-        //     g2.drawString("WIN", 1070, 340);
-        // }
-        // else{
+        if(hasWon){
+            g2.drawString("WINS", 1055, 340);
+        }
+        else{
             g2.drawString("TURN", 1050, 340);
-        // }
+        }
 
         // Draws the Pieces (initially)
         for(Piece p: simPieces){
