@@ -23,7 +23,7 @@ import tile.Water;
 public class GamePanel extends JPanel implements Runnable{
     final int FPS = 60;
 
-    // Colors 
+    // Created Colors 
     final Color sidePanelColor = new Color(225,234,169);
     final Color redTeam = new Color(255,87,87); 
     final Color blueTeam = new Color(83,113,254); 
@@ -88,7 +88,7 @@ public class GamePanel extends JPanel implements Runnable{
         redbird = getPanelImage("redbird");
         bluewin = getPanelImage("bluewin");
         redwin = getPanelImage("redwin");
-        // set up the custom font
+        // sets up the custom font
         moreSugar = getNewFont("more-sugar.regular", 45F); 
     }
 
@@ -175,7 +175,7 @@ public class GamePanel extends JPanel implements Runnable{
     // When we run launch game, it goes to here, this is where the game loop happens 
     @Override
     public void run() {
-        //GAME LOOP
+        // GAME LOOP
         double drawInterval = 1000000000/FPS; 
         double delta = 0; 
         long lastTime = System.nanoTime(); 
@@ -214,13 +214,15 @@ public class GamePanel extends JPanel implements Runnable{
         if (mouse.pressed == false){
             if(activeP != null){
                 if(isValidSquare){ 
-                    // MOVE IS CONFIRMED
-                    copyPieces(simPieces, pieces); // update the list in case piece has been captured and removed during the simulation 
+                    // move is CONFIRMED
+                    // update the list in case piece has been captured and removed during the simulation 
+                    copyPieces(simPieces, pieces); 
                     activeP.updatePosition();
                     changePlayer();
                 }
                 else{
-                    copyPieces(pieces, simPieces); // the move is not valid so reset everything 
+                    // the move is not valid so reset everything 
+                    copyPieces(pieces, simPieces); 
                     activeP.resetPosition(); 
                     activeP = null;
                 }     
@@ -237,16 +239,16 @@ public class GamePanel extends JPanel implements Runnable{
         isValidSquare = false; 
 
         // reset the piece list in every loop
-        // this is basically for restoring the remove piece during the simulation
+        // this is basically for restoring the removed piece during the simulation
         copyPieces(pieces, simPieces); 
 
-        // If a piece is being held, update its position 
+        // if a piece is being held, update its position 
         activeP.x = mouse.x - Board.HALF_SQUARE_SIZE; 
         activeP.y = mouse.y - Board.HALF_SQUARE_SIZE; 
         activeP.col = activeP.getCol(activeP.x); 
         activeP.row = activeP.getRow(activeP.y); 
 
-        // Check if piece is hovering over a reachable square
+        // check if piece is hovering over a reachable square
         if(activeP.canMove(activeP.col, activeP.row)){
             canMove = true; 
             // if hitting a piece, remove it from the list 
