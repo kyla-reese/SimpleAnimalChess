@@ -80,7 +80,14 @@ public class GamePanel extends JPanel implements Runnable{
         // sets up board 
         setBoard();
         // gets all the images needed for the side panel 
-        getPanelImages(); 
+        vines = getPanelImage("vines");
+        backgrass = getPanelImage("backgrass");
+        frontgrass = getPanelImage("frontgrass");
+        speechbubble = getPanelImage("speechbubble");
+        bluebird = getPanelImage("bluebird");
+        redbird = getPanelImage("redbird");
+        bluewin = getPanelImage("bluewin");
+        redwin = getPanelImage("redwin");
         // set up the custom font
         moreSugar = getNewFont("more-sugar.regular", 45F); 
     }
@@ -141,19 +148,14 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-    public void getPanelImages(){
+    public BufferedImage getPanelImage(String imagePath){
+        BufferedImage panelImage = null; 
         try{
-            vines = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/vines.png"));
-            backgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/backgrass.png")); 
-            frontgrass = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/frontgrass.png"));
-            speechbubble = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/speechbubble.png"));
-            bluebird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluebird.png"));
-            redbird = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redbird.png"));
-            bluewin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/bluewin.png"));
-            redwin = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/redwin.png"));
+            panelImage = ImageIO.read(new FileInputStream("SimpleAnimalChess/res/sidepanel/" + imagePath + ".png"));
         }catch(IOException e){
             e.printStackTrace();
         }
+        return panelImage; 
     }
 
     public Font getNewFont(String fontPath, float size){
