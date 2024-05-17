@@ -13,9 +13,6 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 
 # -------------------------------------------------- MY NOTES ------------------------------------------------------
 
-Tutorial that I followed: https://www.youtube.com/watch?v=jzCxywhTAUI (currently stopped at 17:17)
-Main --> GamePanel --> Board, Piece, Tile
-
 ## Things I learned
 
 ### GENERAL
@@ -28,8 +25,7 @@ Main --> GamePanel --> Board, Piece, Tile
 
 ### THE PROCESS
 
-To Dos done:
-
+To Dos Done:
 [ X ] only animals with greater or equal power may eat (does not account for mouse and elephant exception)
 [ X ] all pieces currently cannot go on water
 [ X ] mouse can swim in water
@@ -46,10 +42,13 @@ To Dos done:
 [ X ] no win state (reach Den -- does not matter if all oppenets pieces are gone, must reach den, if all pieces for both players gone, game over <-- don't think this is possible)
 [ X ] does not end game (part of win state)
 [ X ] side panel section of jpanel is still empty
-[ ] the win is pretty spaghetti as of rn, make it cleaner but it works as is
+[ X ] the win is pretty spaghetti as of rn, make it cleaner but it works as is
 
 ### Credits
 
 Art by: irasutoya (taken from Canva free graphics)
-Font: https://www.1001fonts.com/more-sugar-font.html
 Design: Me
+Font: https://www.1001fonts.com/more-sugar-font.html
+Tutorial I followed: https://www.youtube.com/watch?v=jzCxywhTAUI
+
+Note: This game was made by modifying code for the game chess based on the above tutorial
