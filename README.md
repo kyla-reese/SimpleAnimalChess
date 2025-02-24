@@ -8,7 +8,8 @@
 <br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] a player can't move into its own den (all pieces now -- dapat)
 <br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] mouse can capture elephant
 <br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] elphant can't capture mouse
-<br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] trap functionalites (works for enemy traps only, im deciding that elephant still cant eat mouse tho, and mouse can still capture elphant)
+<br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] trap functionalites (works for enemy traps only)
+<br> &nbsp;&nbsp;&nbsp;&nbsp;(I'm deciding that elephant still cant eat mouse tho, and mouse can still capture elphant)
 <br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] A mouse on the river may not capture an elephant or another mouse on land
 <br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] A mouse on the river may capture another mouse on the river
 <br> &nbsp;&nbsp;&nbsp;&nbsp;[ X ] A mouse on land may not capture a mouse on the river
